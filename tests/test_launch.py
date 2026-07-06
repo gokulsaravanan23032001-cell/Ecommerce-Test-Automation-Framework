@@ -1,10 +1,9 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+from pages.home_page import HomePage
 
-def test_launch_browser():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.maximize_window()
-    driver.get("https://automationexercise.com")
+
+def test_launch_browser(driver):
+    home_page = HomePage(driver)
+
+    home_page.load()
+
     assert "Automation Exercise" in driver.title
-    driver.quit()
