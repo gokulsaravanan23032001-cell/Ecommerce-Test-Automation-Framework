@@ -1,0 +1,24 @@
+# Virtual Environment
+.venv/
+
+# PyCharm
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# PyTest
+.pytest_cache/
+
+# Reports
+reports/
+
+# Screenshots
+screenshots/
+
+# Logs
+logs/
+
+# Environment
+.env
