@@ -21,5 +21,14 @@ class BasePage:
             EC.visibility_of_element_located(locator)
         ).send_keys(text)
 
+    def find(self, locator):
+        return self.wait.until(
+            EC.visibility_of_element_located(locator)
+        )
+
+    def type(self, locator, text):
+        self.find(locator).clear()
+        self.find(locator).send_keys(text)
+
     def get_title(self):
         return self.driver.title
