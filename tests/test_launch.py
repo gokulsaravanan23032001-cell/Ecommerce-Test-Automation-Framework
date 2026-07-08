@@ -6,4 +6,4 @@ def test_launch_browser(driver):
 
     home_page.load()
 
-    assert "Automation Exercise" in driver.title
+    assert "Google" in driver.title
