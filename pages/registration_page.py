@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
 
+
 class RegistrationPage(BasePage):
 
     TITLE_MR = (By.ID, "id_gender1")
@@ -24,6 +25,10 @@ class RegistrationPage(BasePage):
     MOBILE = (By.ID, "mobile_number")
 
     CREATE_ACCOUNT = (By.XPATH, "//button[@data-qa='create-account']")
+    ACCOUNT_CREATED = (By.XPATH, "//h2[@data-qa='account-created']")
+    CONTINUE_BUTTON = (By.XPATH, "//a[@data-qa='continue-button']")
+    DELETE_ACCOUNT = (By.XPATH, "//a[@href='/delete_account']")
+    ACCOUNT_DELETED = (By.CSS_SELECTOR, "h2[data-qa='account-deleted']")
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -40,9 +45,11 @@ class RegistrationPage(BasePage):
         self.select_by_visible_text(self.YEAR, year)
 
     def subscribe_newsletter(self):
+        self.scroll_to_element(self.NEWSLETTER)
         self.click(self.NEWSLETTER)
 
     def subscribe_offers(self):
+        self.scroll_to_element(self.OFFERS)
         self.click(self.OFFERS)
 
     def enter_address_information(
@@ -70,3 +77,17 @@ class RegistrationPage(BasePage):
 
     def click_create_account(self):
         self.click(self.CREATE_ACCOUNT)
+
+    def is_account_created(self):
+        return self.find(self.ACCOUNT_CREATED).is_displayed()
+
+    def click_continue(self):
+        self.logger.info("Clicking Continue button")
+        self.click(self.CONTINUE_BUTTON)
+
+    def click_delete_account(self):
+        self.logger.info("Clicking Delete Account")
+        self.click(self.DELETE_ACCOUNT)
+
+    def is_account_deleted(self):
+        return self.find(self.ACCOUNT_DELETED).is_displayed()

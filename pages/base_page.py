@@ -1,5 +1,9 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import (
+        StaleElementReferenceException,
+        ElementClickInterceptedException
+    )
 from utilities.logger import Logger
 
 class BasePage:
@@ -13,17 +17,35 @@ class BasePage:
         self.logger.info(f"Opening URL: {url}")
         self.driver.get(url)
 
+
     def click(self, locator):
+
         self.logger.info(f"Clicking element: {locator}")
 
-        self.wait.until(
-            EC.element_to_be_clickable(locator)
-        ).click()
+        for attempt in range(3):
 
-    def enter_text(self, locator, text):
-        self.wait.until(
-            EC.visibility_of_element_located(locator)
-        ).send_keys(text)
+            try:
+
+                self.wait.until(
+                    EC.element_to_be_clickable(locator)
+                ).click()
+
+                return
+
+            except (
+                    StaleElementReferenceException,
+                    ElementClickInterceptedException
+            ):
+
+                self.logger.warning(
+                    f"Retrying click ({attempt + 1}/3)"
+                )
+
+        raise Exception(
+            f"Unable to click element: {locator}"
+        )
+
+    
 
     def find(self, locator):
         return self.wait.until(
@@ -44,3 +66,10 @@ class BasePage:
 
     def get_title(self):
         return self.driver.title
+
+    def scroll_to_element(self, locator):
+        element = self.find(locator)
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block: 'center'});",
+            element
+        )
